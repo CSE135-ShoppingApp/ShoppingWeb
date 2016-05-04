@@ -1,0 +1,17 @@
+﻿@model IEnumerable<Shoppa.Models.Category>
+@{
+    ViewBag.Title = "Store";
+}
+<h3>Browse Categories</h3>
+<p>
+    Select from @Model.Count()
+    categories:
+</p>
+<ul>
+    @foreach (var category in Model)
+    {
+        <li>
+            @Html.ActionLink(category.Name, "Browse", new { category = category.Name })
+        </li>
+    }
+</ul>
