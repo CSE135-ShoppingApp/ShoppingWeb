@@ -1,0 +1,97 @@
+﻿@model Shoppa.ViewModels.ShoppingCartViewModel
+
+@{
+    ViewBag.Title = "Shopping Cart";
+}
+
+@section scripts {
+<script type="text/javascript">
+
+    function htmlDecode(value) {
+        return $('<div/>').html(value).text();
+    }
+
+  
+
+    $(function () {
+        // Document.ready -> link up remove event handler
+        $(".RemoveLink").click(function () {
+            // Get the id from the link
+            var recordToDelete = $(this).attr("data-id");
+            if (recordToDelete != '') {
+                // Perform the ajax post
+                $.post("/ShoppingCart/RemoveFromCart", {"id": recordToDelete },
+                    function (data) {
+                        // Successful requests get here
+                        // Update the page elements
+                        if (data.ItemCount == 0) {
+                            $('#row-' + data.DeleteID).fadeOut('slow');
+                        } else {
+                            $('#item-count-' + data.DeleteID).text(data.ItemCount);
+                        }
+                        $('#cart-total').text('$'+data.CartTotal);
+                        $('#update-message').text(htmlDecode((data.Message)));
+                        $('#cart-status').text('Cart (' + data.CartCount + ')');
+                    });
+            }
+        });
+    });
+</script>
+    }
+
+<h2>Review your cart:</h2>
+
+<p class="button">
+    @Html.ActionLink("Checkout »", "AddressAndPayment", "Checkout", null, new { @class = "btn btn-primary" })
+</p>
+
+<table class="table">
+    <tr>
+        <th>
+            Product
+        </th>
+        <th>
+            Price (each)
+        </th>
+        <th>
+            Quantity
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model.CartItems) {
+    <tr id="row-@item.ID">
+        <td>
+            @Html.ActionLink(item.Product.Name,"Details", "Store", new { id = item.ProductID }, null)
+
+        </td>
+
+        <td>
+            @Html.DisplayFor(modelItem => item.Price)
+
+
+        </td>
+        <td id="item-count-@item.ID">
+
+            @Html.DisplayFor(modelItem => item.Count)
+
+        </td>
+        <td>
+            <a href="#" class="RemoveLink"
+               data-id="@item.ID">
+                Remove from cart
+            </a>
+        </td>
+
+    </tr>
+}
+<tr>
+    <td>
+        @Html.DisplayNameFor(modelItem => modelItem.CartTotal)
+    </td>
+    <td></td>
+    <td></td>
+    <td id="cart-total">
+        @Html.DisplayFor(modelItem => modelItem.CartTotal)
+    </td>
+</table>

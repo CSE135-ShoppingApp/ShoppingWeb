@@ -1,0 +1,12 @@
+Assumptions:
+1. An owner can delete and/or update every category regardless of whether he/she was the one who created the category.
+2. Use preferred method on category updates
+Assumptions for products:
+1. Instead of using links for the product management page, we used a dropdown list to keep it cleaner
+2. instead of providing textboxes in the products table, we provide individual pages for edition and deletion
+Assumptions for products browsing.
+1. Instead of using links for the product browsing page, we used a dropdown list to keep it cleaner
+Assumptions for shopping cart:
+1. The price is fixed at the point the user added the product to the cart
+General assumptions:
+⁃ The order in which the links can be visited is not limited by the application because any of those links could be copy/used by the end user

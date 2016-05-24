@@ -1,0 +1,8 @@
+﻿<li>
+@Html.ActionLink("Cart (" + ViewData["CartCount"] + ")", "Index", "ShoppingCart", null, new { id = "cart-status" })
+</li>
+@if (int.Parse(ViewData["CartCount"].ToString()) > 0) { 
+    <li>
+        @Html.ActionLink("Buy Shopping Cart", "AddressAndPayment", "Checkout")
+    </li>
+}
