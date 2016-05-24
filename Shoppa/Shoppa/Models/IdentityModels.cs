@@ -11,26 +11,26 @@ namespace Shoppa.Models
     // You can add profile data for the user by adding more properties to your ApplicationUser class, please visit http://go.microsoft.com/fwlink/?LinkID=317594 to learn more.
     public class ApplicationUser : IdentityUser
     {
-        [Index("IX_UserUserName", 1, IsUnique = true)]
+        public static string GenericPassword = "@G3neralP@ssw0rd";
+
+        [Index("IX_UniqueUser", 1, IsUnique = true)]
         [Required]
         [StringLength(60, MinimumLength = 3)]
+        [RegularExpression(@"^[a-zA-Z0-9_]+$")]
         public override string UserName { get; set; }
 
-        [Index("IX_UserState", 2, IsUnique = true)]
+        [Index("IX_UniqueUser", 2, IsUnique = true)]
         [Required]
-        public int StateID { get; set; }
+        public State State { get; set; }
 
-        [Index("IX_UserAge", 3, IsUnique = true)]
+        [Index("IX_UniqueUser", 3, IsUnique = true)]
         [Required]
         [Range(1, 100)]
         public int Age { get; set; }
 
-        [Index("IX_UserRole", 4, IsUnique = true)]
+        [Index("IX_UniqueUser", 4, IsUnique = true)]
         [Required]
-        [Display(Name = "Is Owner")]
-        public bool IsOwner { get; set; }
-
-        public virtual State State { get; set; }
+        public Roles Role { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
@@ -39,6 +39,12 @@ namespace Shoppa.Models
             // Add custom user claims here
             return userIdentity;
         }
+    }
+
+    public enum Roles
+    {
+        Owner,
+        Customer
     }
 
 }

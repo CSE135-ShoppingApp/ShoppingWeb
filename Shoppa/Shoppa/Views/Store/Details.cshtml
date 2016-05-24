@@ -1,8 +1,52 @@
-﻿@model Shoppa.Models.Product
+﻿@model Shoppa.ViewModels.ProductOrderViewModel
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Product - " + @Html.DisplayFor(model => model.Product.Name);
 }
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+<h2>@Html.DisplayFor(model => model.Product.Name)</h2>
+<hr />
+<div id="product-details" class="row">
 
-<h2>Product: @Model.Name</h2>
+    @Html.HiddenFor(model => model.ProductID)
 
+    <dl class="dl-horizontal col-md-4">
+        <dt>
+            @Html.DisplayNameFor(model => model.Product.SKU)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Product.SKU)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Product.Category)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Product.Category.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Product.Price)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Product.Price)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Quantity)
+        </dt>
+        <dd>
+            @Html.TextBoxFor(model => model.Quantity, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Quantity, "", new { @class = "text-danger" })
+
+        </dd>
+
+
+    </dl>
+
+</div>
+<div class="row">
+    <input type="submit" value="Add to cart" class="btn btn-default" />
+</div>
+}

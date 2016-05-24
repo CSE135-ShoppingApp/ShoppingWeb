@@ -170,9 +170,13 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\CategoriesController.cs" />
+    <Compile Include="Controllers\CheckoutController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ProductsController.cs" />
+    <Compile Include="Controllers\ShoppingCartController.cs" />
     <Compile Include="Controllers\StoreController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -201,17 +205,99 @@
     <Compile Include="Migrations\201605041136545_LatestChanges.Designer.cs">
       <DependentUpon>201605041136545_LatestChanges.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201605041311455_Registration.cs" />
+    <Compile Include="Migrations\201605041311455_Registration.Designer.cs">
+      <DependentUpon>201605041311455_Registration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201605041507332_FixedState.cs" />
+    <Compile Include="Migrations\201605041507332_FixedState.Designer.cs">
+      <DependentUpon>201605041507332_FixedState.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201605041509409_NewEmail.cs" />
+    <Compile Include="Migrations\201605041509409_NewEmail.Designer.cs">
+      <DependentUpon>201605041509409_NewEmail.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201605041519416_FinishedUser.cs" />
+    <Compile Include="Migrations\201605041519416_FinishedUser.Designer.cs">
+      <DependentUpon>201605041519416_FinishedUser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201605041527325_UniqueUser.cs" />
+    <Compile Include="Migrations\201605041527325_UniqueUser.Designer.cs">
+      <DependentUpon>201605041527325_UniqueUser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201605041647501_Categories.cs" />
+    <Compile Include="Migrations\201605041647501_Categories.Designer.cs">
+      <DependentUpon>201605041647501_Categories.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201605051145458_CategoryChanges.cs" />
+    <Compile Include="Migrations\201605051145458_CategoryChanges.Designer.cs">
+      <DependentUpon>201605051145458_CategoryChanges.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201605051147273_CategoryChangesPlus.cs" />
+    <Compile Include="Migrations\201605051147273_CategoryChangesPlus.Designer.cs">
+      <DependentUpon>201605051147273_CategoryChangesPlus.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201605051153164_CategoryChangesAgain.cs" />
+    <Compile Include="Migrations\201605051153164_CategoryChangesAgain.Designer.cs">
+      <DependentUpon>201605051153164_CategoryChangesAgain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201605051223363_AddedCategoryID.cs" />
+    <Compile Include="Migrations\201605051223363_AddedCategoryID.Designer.cs">
+      <DependentUpon>201605051223363_AddedCategoryID.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201605051943500_ProductChanges.cs" />
+    <Compile Include="Migrations\201605051943500_ProductChanges.Designer.cs">
+      <DependentUpon>201605051943500_ProductChanges.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201605052317513_AddedShoppingCart.cs" />
+    <Compile Include="Migrations\201605052317513_AddedShoppingCart.Designer.cs">
+      <DependentUpon>201605052317513_AddedShoppingCart.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201605060208248_CheckoutAdded.cs" />
+    <Compile Include="Migrations\201605060208248_CheckoutAdded.Designer.cs">
+      <DependentUpon>201605060208248_CheckoutAdded.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201605060247325_OrderChanges.cs" />
+    <Compile Include="Migrations\201605060247325_OrderChanges.Designer.cs">
+      <DependentUpon>201605060247325_OrderChanges.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201605060304268_UpdatedOrderRemoveDates.cs" />
+    <Compile Include="Migrations\201605060304268_UpdatedOrderRemoveDates.Designer.cs">
+      <DependentUpon>201605060304268_UpdatedOrderRemoveDates.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201605060417015_StateAddedToOrder.cs" />
+    <Compile Include="Migrations\201605060417015_StateAddedToOrder.Designer.cs">
+      <DependentUpon>201605060417015_StateAddedToOrder.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201605060735078_FixedSKULengthFKs.cs" />
+    <Compile Include="Migrations\201605060735078_FixedSKULengthFKs.Designer.cs">
+      <DependentUpon>201605060735078_FixedSKULengthFKs.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201605061441436_ChangedProductModel.cs" />
+    <Compile Include="Migrations\201605061441436_ChangedProductModel.Designer.cs">
+      <DependentUpon>201605061441436_ChangedProductModel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201605061559245_ChangedCheckoutFields.cs" />
+    <Compile Include="Migrations\201605061559245_ChangedCheckoutFields.Designer.cs">
+      <DependentUpon>201605061559245_ChangedCheckoutFields.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Category.cs" />
+    <Compile Include="Models\ShoppaDBContext.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="Models\ShoppingCartItem.cs" />
-    <Compile Include="Models\ShoppingCart.cs" />
+    <Compile Include="Models\Order.cs" />
+    <Compile Include="Models\OrderDetail.cs" />
+    <Compile Include="Models\Cart.cs" />
     <Compile Include="Models\Product.cs" />
+    <Compile Include="Models\ShoppingCart.cs" />
     <Compile Include="Models\State.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModels\ProductOrderViewModel.cs" />
+    <Compile Include="ViewModels\ShoppingCartRemoveViewModel.cs" />
+    <Compile Include="ViewModels\ShoppingCartViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
@@ -287,14 +373,25 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\Products\Create.cshtml" />
-    <Content Include="Views\Products\Delete.cshtml" />
-    <Content Include="Views\Products\Details.cshtml" />
-    <Content Include="Views\Products\Edit.cshtml" />
     <Content Include="Views\Products\Index.cshtml" />
     <Content Include="Views\Store\Details.cshtml" />
     <Content Include="Views\Store\Browse.cshtml" />
     <Content Include="Views\Store\Index.cshtml" />
+    <Content Include="Views\Error\AccessDenied.cshtml" />
+    <Content Include="Views\Categories\Create.cshtml" />
+    <Content Include="Views\Categories\Delete.cshtml" />
+    <Content Include="Views\Categories\Details.cshtml" />
+    <Content Include="Views\Categories\Edit.cshtml" />
+    <Content Include="Views\Categories\Index.cshtml" />
+    <Content Include="Views\Products\Details.cshtml" />
+    <Content Include="Views\Products\Create.cshtml" />
+    <Content Include="Views\Products\Edit.cshtml" />
+    <Content Include="Views\Products\Delete.cshtml" />
+    <Content Include="Views\ShoppingCart\Index.cshtml" />
+    <Content Include="Views\ShoppingCart\CartSummary.cshtml" />
+    <Content Include="Views\Checkout\AddressAndPayment.cshtml" />
+    <Content Include="Views\Checkout\Complete.cshtml" />
+    <Content Include="Views\Store\CategoryMenu.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -321,6 +418,63 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201605041136545_LatestChanges.resx">
       <DependentUpon>201605041136545_LatestChanges.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605041311455_Registration.resx">
+      <DependentUpon>201605041311455_Registration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605041507332_FixedState.resx">
+      <DependentUpon>201605041507332_FixedState.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605041509409_NewEmail.resx">
+      <DependentUpon>201605041509409_NewEmail.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605041519416_FinishedUser.resx">
+      <DependentUpon>201605041519416_FinishedUser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605041527325_UniqueUser.resx">
+      <DependentUpon>201605041527325_UniqueUser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605041647501_Categories.resx">
+      <DependentUpon>201605041647501_Categories.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605051145458_CategoryChanges.resx">
+      <DependentUpon>201605051145458_CategoryChanges.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605051147273_CategoryChangesPlus.resx">
+      <DependentUpon>201605051147273_CategoryChangesPlus.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605051153164_CategoryChangesAgain.resx">
+      <DependentUpon>201605051153164_CategoryChangesAgain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605051223363_AddedCategoryID.resx">
+      <DependentUpon>201605051223363_AddedCategoryID.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605051943500_ProductChanges.resx">
+      <DependentUpon>201605051943500_ProductChanges.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605052317513_AddedShoppingCart.resx">
+      <DependentUpon>201605052317513_AddedShoppingCart.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605060208248_CheckoutAdded.resx">
+      <DependentUpon>201605060208248_CheckoutAdded.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605060247325_OrderChanges.resx">
+      <DependentUpon>201605060247325_OrderChanges.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605060304268_UpdatedOrderRemoveDates.resx">
+      <DependentUpon>201605060304268_UpdatedOrderRemoveDates.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605060417015_StateAddedToOrder.resx">
+      <DependentUpon>201605060417015_StateAddedToOrder.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605060735078_FixedSKULengthFKs.resx">
+      <DependentUpon>201605060735078_FixedSKULengthFKs.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605061441436_ChangedProductModel.resx">
+      <DependentUpon>201605061441436_ChangedProductModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201605061559245_ChangedCheckoutFields.resx">
+      <DependentUpon>201605061559245_ChangedCheckoutFields.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

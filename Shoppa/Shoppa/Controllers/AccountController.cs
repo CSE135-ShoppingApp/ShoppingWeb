@@ -15,6 +15,7 @@ namespace Shoppa.Controllers
     [Authorize]
     public class AccountController : Controller
     {
+        private ShoppaDBContext context = new ShoppaDBContext();
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
@@ -75,10 +76,12 @@ namespace Shoppa.Controllers
 
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            var result = await SignInManager.PasswordSignInAsync(model.UserName, ApplicationUser.GenericPassword, model.RememberMe, shouldLockout: false);
             switch (result)
             {
                 case SignInStatus.Success:
+                    MigrateShoppingCart(model.UserName);
+                    
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
@@ -86,9 +89,10 @@ namespace Shoppa.Controllers
                     return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
                 case SignInStatus.Failure:
                 default:
-                    ModelState.AddModelError("", "Invalid login attempt.");
+                    ModelState.AddModelError("", "The provided name " + model.UserName + " is not known. Please provide a valid user name.");
                     return View(model);
             }
+
         }
 
         //
@@ -151,21 +155,55 @@ namespace Shoppa.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-                var result = await UserManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
-                {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
-                    // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
-                    // Send an email with this link
-                    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                var user = new ApplicationUser { UserName = model.UserName, Age = model.Age, Role = model.Role, State = model.State };
 
-                    return RedirectToAction("Index", "Home");
+                using (var dbContextTransaction = context.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        ApplicationUser existing = context.Users.Where(u => u.UserName == model.UserName).FirstOrDefault();
+
+                        if (existing != null)
+                        {
+                            ModelState.AddModelError("", "The user already exists.");
+                        }
+                        else
+                        {
+
+                            var result = await UserManager.CreateAsync(user, ApplicationUser.GenericPassword);
+
+                            if (result.Succeeded)
+                            {
+                                if (user.Role == Roles.Owner)
+                                {
+                                    UserManager.AddToRole(user.Id, "isOwner");
+                                }
+
+                                MigrateShoppingCart(model.UserName);
+
+
+                                await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+
+                                // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
+                                // Send an email with this link
+                                // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                                // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                                // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                                dbContextTransaction.Commit();
+
+                                return RedirectToAction("Index", "Home", new { message = "You have sucessfully signed up!" });
+                            }
+                            AddErrors(result);
+                        }
+
+
+                    }
+                    catch (Exception)
+                    {
+                        dbContextTransaction.Rollback();
+                    }
+
                 }
-                AddErrors(result);
             }
 
             // If we got this far, something failed, redisplay form
@@ -372,7 +410,7 @@ namespace Shoppa.Controllers
                     Email = model.Email,
                     Age = model.Age,
                     State  = model.State,
-                    IsOwner = model.IsOwner };
+                    Role = Roles.Customer };
                 var result = await UserManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
@@ -456,6 +494,15 @@ namespace Shoppa.Controllers
                 return Redirect(returnUrl);
             }
             return RedirectToAction("Index", "Home");
+        }
+
+        private void MigrateShoppingCart(string UserName)
+        {
+            // Associate shopping cart items with logged-in user
+            var cart = ShoppingCart.GetCart(this.HttpContext);
+
+            cart.MigrateCart(UserName);
+            Session[ShoppingCart.CartSessionKey] = UserName;
         }
 
         internal class ChallengeResult : HttpUnauthorizedResult

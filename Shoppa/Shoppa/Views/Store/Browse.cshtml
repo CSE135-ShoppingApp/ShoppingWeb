@@ -3,5 +3,13 @@
 @{
     ViewBag.Title = "Browse";
 }
-
-<h2>Browsing Category: @Model.Name</h2>
+<h2>Browsing Category: @Html.DisplayFor(model => model.Name)</h2>
+<ul>
+    @foreach (var product in Model.Products)
+    {
+        <li>
+            @Html.ActionLink(product.Name,
+"Details", new { id = product.ID })
+        </li>
+    }
+</ul>

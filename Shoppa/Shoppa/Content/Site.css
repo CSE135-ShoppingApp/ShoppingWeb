@@ -3,6 +3,18 @@
     padding-bottom: 20px;
 }
 
+@media (min-width: 1680px) {
+    .sb-fixed {
+        position: fixed;
+        height: 100%;
+    }
+
+        .sb-fixed > .well {
+            height: 100%;
+        }
+}
+ 
+
 /* Set padding to keep content from hitting the edges */
 .body-content {
     padding-left: 15px;

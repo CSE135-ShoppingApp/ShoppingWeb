@@ -10,31 +10,61 @@ using Shoppa.Models;
 
 namespace Shoppa.Controllers
 {
+    [AuthorizeUserAttribute(Roles = "isOwner")]
     public class ProductsController : Controller
     {
         private ShoppaDBContext db = new ShoppaDBContext();
 
         // GET: Products
-        public ActionResult Index(string productCategory, string searchString)
+        public ActionResult Index(string productCategory, string searchString, string message, bool? isGetBack)
         {
-            // Get categories list
-            var CategoriesList = db.Products.Select(p => p.Category).Distinct().ToList();
+            if (string.IsNullOrEmpty(searchString))
+            {
+                if (isGetBack.HasValue && isGetBack.Value)
+                {
+                    TempData["selectedSearchString"] = null;
+                }
+                else
+                {
+                    searchString = (string)TempData["selectedSearchString"];
+                }
+            }
+             
+            if (string.IsNullOrEmpty(productCategory))
+            {
+                if (isGetBack.HasValue && isGetBack.Value)
+                {
+                    TempData["selectedProductCategory"] = null;
+                }
+                else
+                {
+                    productCategory = (string)TempData["selectedProductCategory"];
+                }
+            }
 
-            ViewBag.productCategory = new SelectList(CategoriesList);
+            ViewBag.UpdateMessage = message;
+
+            // Get categories list
+            var CategoriesList = db.Categories.Select(p => p.Name).Distinct().ToList();
+
+            ViewBag.ProductCategory = new SelectList(CategoriesList, productCategory);
 
             var products = db.Products.AsQueryable();
 
             if (!String.IsNullOrEmpty(searchString))
             {
                 products = products.Where(s => s.Name.Contains(searchString));
+                ViewBag.SearchString = searchString;
+                TempData["selectedSearchString"] = searchString;
             }
 
             if (!string.IsNullOrEmpty(productCategory))
             {
                 products = products.Where(x => x.Category != null && x.Category.Name == productCategory);
+                TempData["selectedProductCategory"] = productCategory;
             }
 
-            return View(products);
+            return View(products.ToList());
         }
 
         // GET: Products/Details/5
@@ -53,9 +83,10 @@ namespace Shoppa.Controllers
         }
 
         // GET: Products/Create
-        [Authorize(Roles = "isOwner")] 
         public ActionResult Create()
         {
+            ViewBag.CategoryID = new SelectList(db.Categories, "ID",
+"Name");
             return View();
         }
 
@@ -64,21 +95,47 @@ namespace Shoppa.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "isOwner")] 
-        public ActionResult Create([Bind(Include = "ID,SKU,Name,AvailableDate,Category,Price,Rating")] Product product)
+        public ActionResult Create([Bind(Include = "ID,SKU,Name,AvailableDate,CategoryID,Price,Rating")] Product product)
         {
             if (ModelState.IsValid)
             {
-                db.Products.Add(product);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+
+                using (var dbContextTransaction = db.Database.BeginTransaction())
+                {
+                    string error = "Could not add, check that a product with the same SKU does not exist already.";
+
+                    try
+                    {
+                        var p = db.Products.Where(c => c.SKU == product.SKU).FirstOrDefault();
+
+                        if (p == null)
+                        {
+                            db.Products.Add(product);
+                            db.SaveChanges();
+                            dbContextTransaction.Commit();
+
+                            return RedirectToAction("Index", new { message = "You have added a product!" });
+                        }
+
+
+                        ModelState.AddModelError("", error);
+                    }
+                    catch (Exception)
+                    {
+                        dbContextTransaction.Rollback();
+                        ModelState.AddModelError("", error);
+                    }
+                }
+
+           
             }
+            ViewBag.CategoryID = new SelectList(db.Categories, "ID",
+"Name", product.CategoryID);
 
             return View(product);
         }
 
         // GET: Products/Edit/5
-        [Authorize(Roles = "isOwner")] 
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -89,7 +146,12 @@ namespace Shoppa.Controllers
             if (product == null)
             {
                 return HttpNotFound();
+
+                
             }
+
+            ViewBag.CategoryID = new SelectList(db.Categories, "ID",
+   "Name", product.CategoryID);
             return View(product);
         }
 
@@ -98,20 +160,47 @@ namespace Shoppa.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "isOwner")] 
-        public ActionResult Edit([Bind(Include = "ID,SKU,Name,AvailableDate,Category,Price,Rating")] Product product)
+        public ActionResult Edit([Bind(Include = "ID,SKU,Name,AvailableDate,CategoryID,Price,Rating")] Product product)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(product).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+
+                using (var dbContextTransaction = db.Database.BeginTransaction())
+                {
+                    string error = "Could not add, check that a product with the same SKU does not exist already.";
+
+                    try
+                    {
+                        var p = db.Products.Where(c => c.SKU == product.SKU && c.ID != product.ID).FirstOrDefault();
+
+                        if (p == null)
+                        {
+
+                            db.Entry(product).State = EntityState.Modified;
+                            db.SaveChanges();
+                            dbContextTransaction.Commit();
+
+                            return RedirectToAction("Index", new { message = "You have edited a product!" });
+                        }
+
+                        ModelState.AddModelError("", error);
+                    }
+                    catch (Exception)
+                    {
+                        dbContextTransaction.Rollback();
+                        ModelState.AddModelError("", error);
+                    }
+                }
+
             }
+
+            ViewBag.CategoryID = new SelectList(db.Categories, "ID",
+   "Name", product.CategoryID);
+
             return View(product);
         }
 
         // GET: Products/Delete/5
-        [Authorize(Roles = "isOwner")] 
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -129,13 +218,46 @@ namespace Shoppa.Controllers
         // POST: Products/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "isOwner")] 
         public ActionResult DeleteConfirmed(int id)
         {
-            Product product = db.Products.Find(id);
-            db.Products.Remove(product);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+
+
+
+            Product product = null;
+
+            using (var dbContextTransaction = db.Database.BeginTransaction())
+            {
+                string error = "Could not remove, check that the product has not been bought yet.";
+
+                try
+                {
+                    product = db.Products.Find(id);
+
+                    if (product == null)
+                    {
+                        return RedirectToAction("Index");
+
+                    }
+                    else if (product.OrderDetails.Count == 0)
+                    {
+
+                        db.Products.Remove(product);
+                        db.SaveChanges();
+                        dbContextTransaction.Commit();
+
+                        return RedirectToAction("Index", new { message = "You have deleted a product!" });
+                    }
+
+                    ModelState.AddModelError("", error);
+                }
+                catch (Exception)
+                {
+                    dbContextTransaction.Rollback();
+                    ModelState.AddModelError("", error);
+                }
+            }
+
+            return View(product);
         }
 
         protected override void Dispose(bool disposing)

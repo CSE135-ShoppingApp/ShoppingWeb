@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace Shoppa.Models
 {
@@ -20,7 +21,8 @@ namespace Shoppa.Models
         [Display(Name = "Email")]
         public string Email { get; set; }
 
-        public virtual State State { get; set; }
+        [Required]
+        public State State { get; set; }
     }
 
     public class ExternalLoginListViewModel
@@ -62,14 +64,8 @@ namespace Shoppa.Models
     public class LoginViewModel
     {
         [Required]
-        [Display(Name = "Email")]
-        [EmailAddress]
-        public string Email { get; set; }
-
-        [Required]
-        [DataType(DataType.Password)]
-        [Display(Name = "Password")]
-        public string Password { get; set; }
+        [Display(Name = "User")]
+        public string UserName { get; set; }
 
         [Display(Name = "Remember me?")]
         public bool RememberMe { get; set; }
@@ -78,20 +74,20 @@ namespace Shoppa.Models
     public class RegisterViewModel
     {
         [Required]
-        [EmailAddress]
-        [Display(Name = "Email")]
-        public string Email { get; set; }
+        [Display(Name="User")]
+        [StringLength(60, ErrorMessage = "The {0}, must be at least {2} characters long", MinimumLength = 3)]
+        [RegularExpression(@"^[a-zA-Z0-9_]+$", ErrorMessage="The user name should only include alphanumeric characters and underscores")]
+        public string UserName { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
-        [DataType(DataType.Password)]
-        [Display(Name = "Password")]
-        public string Password { get; set; }
+        [Range(1, 100)]
+        public int Age { get; set; }
 
-        [DataType(DataType.Password)]
-        [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
-        public string ConfirmPassword { get; set; }
+        [Required]
+        public State State { get; set; }
+
+        [Required]
+        public Roles Role { get; set; }
     }
 
     public class ResetPasswordViewModel

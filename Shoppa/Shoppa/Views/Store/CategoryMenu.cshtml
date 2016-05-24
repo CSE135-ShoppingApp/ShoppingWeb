@@ -1,0 +1,20 @@
+﻿@model IEnumerable<Shoppa.Models.Category>
+           
+    <h3>Categories</h3>
+    <hr />
+    <ul id="categories" class="nav nav-pills nav-stacked">
+        @foreach (var category in Model)
+        {
+            <li>
+                @Html.ActionLink(category.Name,
+                "Browse", "Store",
+                 new { Category = category.Name }, null)
+            </li>
+        }
+    </ul>
+          
+
+   
+
+    
+   
