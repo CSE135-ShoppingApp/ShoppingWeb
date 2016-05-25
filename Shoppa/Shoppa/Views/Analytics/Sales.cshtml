@@ -1,0 +1,31 @@
+﻿
+@{
+    ViewBag.Title = "Sales";
+}
+
+<h2>Sales</h2>
+
+<p>
+    @using (Html.BeginForm("Sales", "Analytics", FormMethod.Get, new { @class = "form-inline" }))
+    {
+        <div >
+            @Html.Label("Rows")
+            @Html.DropDownList("RowsMenu", null, new { @class = "form-control" })
+        </div>
+        <br/>
+    <div >
+
+        @Html.Label("Order")
+        @Html.DropDownList("OrderMenu", null, new { @class = "form-control" })
+    </div>
+    <br />
+    <div>
+
+        @Html.Label("Product Category")
+        @Html.DropDownList("ProductCategories", null, "All", new { @class = "form-control" })
+    </div>
+        <br/>
+    <input type="submit" value="Run Query" class="btn btn-default" />
+
+    }
+</p>
