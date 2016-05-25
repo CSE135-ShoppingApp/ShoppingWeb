@@ -26,7 +26,6 @@
                                 <ul class="nav navbar-nav">
                                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
                                     <li>@Html.ActionLink("Store", "Index", "Store")</li>
-                                    @{Html.RenderAction("CartSummary", "ShoppingCart");}
 
                                     @if (Request.IsAuthenticated && User.IsInRole("isOwner"))
                                     {
@@ -42,13 +41,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class=" sb-fixed">
-                        <div class="well sidebar-nav">
-                            @{Html.RenderAction("CategoryMenu", "Store");}
-                        </div>
-
-
-                    </div>
+            
                    
                         <div class="row">
 
