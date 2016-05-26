@@ -3,58 +3,108 @@
 
 @{
     ViewBag.Title = "Sales";
+    var rowCriteria = ViewBag.RowsCriteria;
+    var currPage = ViewBag.CurrentPage;
+    var currCol = ViewBag.CurrentColumn;
+
 }
 
 <h2>Sales</h2>
 
 <p>
-    @using (Html.BeginForm("Sales", "Analytics", FormMethod.Get, new { @class = "form-inline" }))
+    @using (Html.BeginForm("Sales", "Analytics", FormMethod.Post, new { @class = "form-inline" }))
     {
-        <div >
+        @Html.Hidden("CurrentPage", (object)@currPage.ToString())
+        @Html.Hidden("CurrentColumn", (object)@currCol.ToString())
+        <div>
             @Html.Label("Rows")
-            @Html.DropDownList("RowsMenu", null, new { @class = "form-control" })
+            @if (ViewBag.ReadOnly ?? false) {
+                @Html.DropDownList("RowsMenu", null, new { @class = "form-control",  @disabled = "true"})
+            } else {
+                @Html.DropDownList("RowsMenu", null, new { @class = "form-control" })
+            }
         </div>
-        <br/>
-    <div >
+        <br />
+        <div>
 
-        @Html.Label("Order")
-        @Html.DropDownList("OrderMenu", null, new { @class = "form-control" })
-    </div>
-    <br />
-    <div>
+            @Html.Label("Order")
+            @if (ViewBag.ReadOnly ?? false)
+            {
+                @Html.DropDownList("OrderMenu", null, new { @class = "form-control", @disabled = "true" })
+            }
+            else
+            {
+                @Html.DropDownList("OrderMenu", null, new { @class = "form-control" })
+            }
+        </div>
+        <br />
+        <div>
+            @Html.Label("Product Category")
+            @if (ViewBag.ReadOnly ?? false)
+            {
+                @Html.DropDownList("ProductCategories", null, "All", new { @class = "form-control", @disabled = "true" })
+            }
+            else
+            {
+                @Html.DropDownList("ProductCategories", null, "All", new { @class = "form-control" })
+            }
+        </div>
+        <br />
+        <input type="submit" name="Button" value="Run Query" class="btn btn-default" />
+    if (ViewBag.ShowNextPage ?? true) {
 
-        @Html.Label("Product Category")
-        @Html.DropDownList("ProductCategories", null, "All", new { @class = "form-control" })
-    </div>
-        <br/>
-    <input type="submit" value="Run Query" class="btn btn-default" />
+        <input type="submit" name="Button" value="Next 20 @rowCriteria" class="btn btn-default" />
+    }
+    if (ViewBag.ShowNextCol ?? false) {
 
+    <input type="submit" name="Button" value="Next 10 Products" class="btn btn-default" />
+    }
     }
 </p>
 
 
 <table class="table">
     <tr>
-@foreach (var field in Model.Fields)
+        @foreach (var field in Model.Fields)
     {
-        <th>
-            @Html.DisplayFor(modelItem => field)
-        </th>
+            <th>
+                @Html.DisplayFor(modelItem => field)
+            </th>
 }
-       
+
     </tr>
+   
 
     @foreach (var row in Model.Rows)
     {
+        int rowN = 1;
+
+
         <tr>
-@foreach (var val in row.Values)
+            @foreach (var val in row.Values)
     {
-            <td>
-                @Html.DisplayFor(modelItem => val)
 
-            </td>
+
+                <td>
+                    @if(rowN == 1)
+                {
+                
+                        <text><strong></text>
+                            }
+
+                            @Html.DisplayFor(modelItem => val)
+                   
+                            @if (rowN == 1)
+                            {
+                                Html.Raw("<text></strong></text>");
+                                rowN++;
+                            }
+</td>
 }
-        </tr>
-    }
+              
+                </tr>
 
-</table>
+
+         }
+
+        </table>

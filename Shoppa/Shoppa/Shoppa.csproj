@@ -178,6 +178,7 @@
     <Compile Include="Models\category.cs">
       <DependentUpon>ShoppaEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Data.cs" />
     <Compile Include="Models\order.cs">
       <DependentUpon>ShoppaEntities.tt</DependentUpon>
     </Compile>
