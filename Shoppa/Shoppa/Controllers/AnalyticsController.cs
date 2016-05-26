@@ -15,6 +15,14 @@ namespace Shoppa.Controllers
         shoppa135dbEntities context = new shoppa135dbEntities();
 
         // GET: Analytics
+        public ActionResult SimilarProducts()
+        {
+            Data d = new Data();
+            d.PerformQuery2();
+            return View(d);
+        }
+
+        // GET: Analytics
         public ActionResult Sales()
         {
             // FILTERING OPTIONS:

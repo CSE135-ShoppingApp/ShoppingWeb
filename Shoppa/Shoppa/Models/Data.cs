@@ -10,6 +10,19 @@ namespace Shoppa.Models
     public class Data
     {
         #region Query
+        private static string query2 = @"
+SELECT TOP 100 p1.name, p2.name, similarity FROM (SELECT id1, id2, (SUM(totalid1*totalid2)/(SQRT(SUM(totalid1*totalid1))*SQRT(SUM(totalid2*totalid2)))) similarity FROM (SELECT u, id1, id2, SUM(ISNULL(orders1.price*orders1.quantity,0)) as totalid1, SUM(ISNULL(orders2.price*orders2.quantity,0))
+	as totalid2 FROM (SELECT users.id as u, id1,id2 FROM users cross join (
+
+select distinct
+       case when a.id<=b.id then a.id else b.id end id1,
+       case when a.id<=b.id then b.id else a.id end id2
+from products A cross join products B where a.id <> b.id) combs) combs JOIN orders orders1 on u = orders1.user_id and orders1.product_id = combs.id1 JOIN orders orders2 
+on u = orders2.user_id and orders2.product_id = combs.id2 
+group by u, id1, id2) priced_list
+GROUP BY id1, id2) s JOIN products p1 on p1.id = id1 JOIN products p2 on p2.id = id2 order by similarity desc
+";
+
         private static string query = @"DECLARE @cols            AS NVARCHAR(MAX),
         @colsWithNoNulls AS NVARCHAR(MAX),
         @query           AS NVARCHAR(MAX),
@@ -125,7 +138,46 @@ DROP TABLE #TEMP";
                     }
                 }
             }
-        } 
+        }
+
+        public void PerformQuery2()
+        {
+            using (SqlConnection con = new SqlConnection("Server=tcp:shoppa135dbserver.database.windows.net,1433;Database=shoppa135smalldbserver;User ID=shoppa135dbuser@shoppa135dbserver;Password=@C5e1352016;Trusted_Connection=False;Encrypt=True;Connection Timeout=999999;"))
+            {
+                using (SqlCommand cmd = new SqlCommand(Data.query2, con))
+                {
+                    cmd.CommandTimeout = 0;
+                    cmd.CommandType = CommandType.Text;
+
+                    con.Open();
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        this.Fields = new List<string>();
+                        this.Rows = new List<Row>();
+
+                        while (reader.Read())
+                        {
+                            if (Fields.Count() == 0)
+                            {
+
+                                for (int i = 0; i < reader.FieldCount; i++)
+                                {
+                                    Fields.Add(reader.GetName(i));
+                                }
+                            }
+
+                            Row row = new Row();
+                            for (int i = 0; i < reader.FieldCount; i++)
+                            {
+                                row.Values.Add(reader.GetValue(i).ToString());
+                            }
+                            Rows.Add(row);
+                        }
+                    }
+                }
+            }
+        }
 
         public List<string> Fields { get; set; }
         public List<Row> Rows { get; set; }

@@ -1,0 +1,44 @@
+﻿
+@{
+    ViewBag.Title = "SimilarProducts";
+}
+
+<h2>SimilarProducts</h2>
+
+
+<table class="table">
+    <tr>
+        @foreach (var field in Model.Fields)
+        {
+            <th>
+                @Html.DisplayFor(modelItem => field)
+            </th>
+        }
+
+    </tr>
+
+
+    @foreach (var row in Model.Rows)
+    {
+
+
+        <tr>
+            @foreach (var val in row.Values)
+            {
+
+
+                <td>
+                  
+
+                    @Html.DisplayFor(modelItem => val)
+
+                  
+            </td>
+            }
+
+        </tr>
+
+
+    }
+
+</table>
