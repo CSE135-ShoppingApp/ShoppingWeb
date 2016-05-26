@@ -1,0 +1,59 @@
+﻿@model Shoppa.Models.Stats
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @using (Html.BeginForm("Index", "Test", FormMethod.Get, new { @class = "form-inline" }))
+    {
+        <div>
+            @Html.Label("Rows")
+            @Html.DropDownList("RowsMenu", null, new { @class = "form-control" })
+        </div>
+        <br />
+        <div>
+
+            @Html.Label("Order")
+            @Html.DropDownList("OrderMenu", null, new { @class = "form-control" })
+        </div>
+        <br />
+        <div>
+
+            @Html.Label("Product Category")
+            @Html.DropDownList("ProductCategories", null, "All", new { @class = "form-control" })
+        </div>
+        <br />
+        <input type="submit" value="Run Query" class="btn btn-default" />
+
+    }
+</p>
+
+<table class="table">
+    <tr>
+        @foreach (var field in Model.cols )
+        {
+            <th>
+                @Html.DisplayFor(modelItem => field)
+            </th>
+        }
+
+    </tr>
+
+    @for (var i = 0; i < Model.rows.Count; i++ )
+    {
+        <tr>
+            <td>@Model.rows[i]</td>
+            @for (var j = 0; j < Model.cols.Count; j++ )
+            {
+                <td>
+                    @(Model.data[i,j])
+
+                </td>
+            }
+        </tr>
+    }
+
+</table>
