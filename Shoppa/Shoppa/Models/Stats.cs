@@ -15,7 +15,9 @@ namespace Shoppa.Models
         // If you wish to target a different database and/or database provider, modify the 'Model1' 
         // connection string in the application configuration file.
         public List<string> rows { get; set; }
-        public List<string> cols {get;set; }
+        public List<string> cols { get; set; }
+        public List<string> rowsSales { get; set; }
+        public List<string> colsSales { get; set; }
         public string[,] data { get; set; }
 
 

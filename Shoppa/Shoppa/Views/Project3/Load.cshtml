@@ -1,0 +1,51 @@
+﻿@model Shoppa.Models.Stats
+
+@{
+    ViewBag.Title = "Load";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Load</h2>
+
+<p>
+    @using (Html.BeginForm("Load", "Project3", FormMethod.Get, new { @class = "form-inline" }))
+    {
+        <div>
+
+            @Html.Label("Product Category")
+            @Html.DropDownList("ProductCategories", null, "All", new { @class = "form-control" })
+        </div>
+        <br />
+        <input type="submit" value="Run Query" class="btn btn-default" />
+
+    }
+
+    <table class="table">
+        <tr>
+            <th></th>
+            @foreach (var field in Model.cols)
+            {
+                <th>
+                    @Html.DisplayFor(modelItem => field)
+                </th>
+            }
+
+        </tr>
+
+        @for (var i = 0; i < Model.rows.Count; i++)
+        {
+            <tr>
+                <td>@Model.rows[i]</td>
+                @for (var j = 0; j < Model.cols.Count; j++)
+                {
+                    <td id="@(Model.rows[i]) @(Model.cols[j])">
+                        @(Model.data[i, j])
+
+                    </td>
+                }
+            </tr>
+        }
+
+    </table>
+
+</p>

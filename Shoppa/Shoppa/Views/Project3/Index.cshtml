@@ -1,0 +1,22 @@
+﻿@model Shoppa.Models.Stats
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @using (Html.BeginForm("Load", "Project3", FormMethod.Get, new { @class = "form-inline" }))
+    {
+        <div>
+
+            @Html.Label("Product Category")
+            @Html.DropDownList("ProductCategories", null, "All", new { @class = "form-control" })
+        </div>
+        <br />
+        <input type="submit" value="Run Query" class="btn btn-default" />
+    }
+
+</p>
