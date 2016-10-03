@@ -172,12 +172,22 @@
     <Compile Include="Controllers\AnalyticsController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\Project3Controller.cs" />
+    <Compile Include="Controllers\TestController.cs" />
+    <Compile Include="Employees.aspx.cs">
+      <DependentUpon>Employees.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Employees.aspx.designer.cs">
+      <DependentUpon>Employees.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\category.cs">
       <DependentUpon>ShoppaEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Data.cs" />
     <Compile Include="Models\order.cs">
       <DependentUpon>ShoppaEntities.tt</DependentUpon>
     </Compile>
@@ -199,6 +209,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ShoppaEntities.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\Stats.cs" />
     <Compile Include="Models\user.cs">
       <DependentUpon>ShoppaEntities.tt</DependentUpon>
     </Compile>
@@ -213,6 +224,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\zocial.css" />
     <Content Include="Content\zocial.svg" />
+    <Content Include="Employees.aspx" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -317,6 +329,10 @@
     <Content Include="Views\Checkout\Complete.cshtml" />
     <Content Include="Views\Store\CategoryMenu.cshtml" />
     <Content Include="Views\Analytics\Sales.cshtml" />
+    <Content Include="Views\Test\Index.cshtml" />
+    <Content Include="Views\Test\partial.cshtml" />
+    <Content Include="Views\Project3\Index.cshtml" />
+    <Content Include="Views\Project3\Load.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
